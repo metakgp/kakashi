@@ -12,23 +12,25 @@ args = parser.parse_args()
 
 
 course_details = json.load(open('./syllabus.json', 'r'))
-for course in course_details[1:2]:
+for course in course_details:
     course = dict(course)
-    course_text = """
-{{Infobox course
-| course_code = %(Code)
-| course_name = %(Name)
-| department = [[%(Department)]]
-| credits = %(Credits)
-| ltp = %(LTP)
+    # NOTE: I have to double the braces to escape it as string formatting
+    # character
+    course_text = r"""
+{{{{Infobox course
+| course_code = {Code}
+| course_name = {Name}
+| department = [[{Department}]]
+| credits = {Credits}
+| ltp = {LTP}
 | professor =
 | venue =
-}}
+}}}}
 
 =Syllabus=
 ==Syllabus mentioned in ERP==
 
-%(Syllabus)
+{Syllabus}
 
 
 ==Concepts taught in class==
@@ -41,7 +43,7 @@ for course in course_details[1:2]:
 
 =Additional Resources=
 """
-    course_text = course_text % course
+    course_text = course_text.format(**course)
     course_page = pywikibot.Page(site, "{}: {}".format(course['Code'], course['Name']))
     course_page.text = course_text
 

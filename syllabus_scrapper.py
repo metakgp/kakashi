@@ -49,32 +49,35 @@ dep_dic={
 }
 
 def get_syllabus(subject_code,subject_name):
-    url = 'https://erp.iitkgp.ernet.in/ERPWebServices/curricula/commonFileDownloader.jsp'
-    data={}
-    data['fileFullPath']='/DATA/ARCHIVE/SUBJECT/SYLLABUS/2009/{0}/{0}_1.pdf'.format(subject_code)
-    data['pageno']='0'
-    data['docId']=''
-    #t=1
-    while True:
-        try:
-            #time.sleep(t)
-            response=requests.post(url,data)
-            break
-        except Exception, e:
-            print(subject_code,t,e.message)
-            exit()
-            t=t*2
-            continue
-    if(response.status_code !=200 or response.apparent_encoding=='ascii'): #when file is not available, we get html response
-        #print(response.status_code)
-        #print(response.text)
-        return
     pdf_file_name = "{0}.pdf".format(subject_code)
     text_file_name= "{0}.txt".format(subject_code)
-    with open(pdf_file_name,"wb") as handle:
-        for data in response.iter_content():
-            handle.write(data)
-    os.system("pdftotext {0} {1}".format(pdf_file_name,text_file_name))
+
+    if not os.path.isfile(text_file_name):
+        url = 'https://erp.iitkgp.ernet.in/ERPWebServices/curricula/commonFileDownloader.jsp'
+        data={}
+        data['fileFullPath']='/DATA/ARCHIVE/SUBJECT/SYLLABUS/2009/{0}/{0}_1.pdf'.format(subject_code)
+        data['pageno']='0'
+        data['docId']=''
+        #t=1
+        while True:
+            try:
+                #time.sleep(t)
+                response=requests.post(url,data)
+                break
+            except Exception, e:
+                print(subject_code,t,e.message)
+                exit()
+                t=t*2
+                continue
+        if(response.status_code !=200 or response.apparent_encoding=='ascii'): #when file is not available, we get html response
+            #print(response.status_code)
+            #print(response.text)
+            return
+        with open(pdf_file_name,"wb") as handle:
+            for data in response.iter_content():
+                handle.write(data)
+        os.system("pdftotext {0} {1}".format(pdf_file_name,text_file_name))
+
     with open(text_file_name, 'r') as content_file:
         content = content_file.read()
         try:
@@ -104,6 +107,7 @@ if __name__ == '__main__':
                 courses.append(res)
             else:
                 print("fail",code)
+
     with open("syllabus.json","w") as result_file:
         json.dump(courses,result_file)
 
