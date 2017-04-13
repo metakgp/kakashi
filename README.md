@@ -21,18 +21,26 @@ with the name of your own bot.
 wget https://gist.githubusercontent.com/hargup/973348fcbcec464dc807/raw/de0bde7fadc4d804e2acf535c0f8803edf823384/user-config.py
 ```
 
-* Generate user and family files.
+* Generate family file.
 ```
-python generate_user_files.py
-```
-```
-python generate_family_files.py
+python generate_family_file.py
 ```
 
-* Clone `kakashi` and run your script
+The script will ask you to insert URL to wiki and a short name of wiki.
+URL of metakgp is https://wiki.metakgp.org/w/Main_Page and enter any short name.
+
+
+* Clone `kakashi`
 ```
 git clone https://github.com/metakgp/kakashi.git ~/kakashi
 ```
+
+* Change current directory  to `~/kakashi`
+```
+cd ~/kakashi
+```
+* Run the script
+
 ```
 python create_prof_pages.py
 ```
