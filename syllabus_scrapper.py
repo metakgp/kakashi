@@ -53,7 +53,7 @@ def get_syllabus(subject_code,subject_name):
     text_file_name= "{0}.txt".format(subject_code)
 
     if not os.path.isfile(text_file_name):
-        url = 'https://erp.iitkgp.ernet.in/ERPWebServices/curricula/commonFileDownloader.jsp'
+        url = 'https://erp.iitkgp.ac.in/ERPWebServices/curricula/commonFileDownloader.jsp'
         data={}
         data['fileFullPath']='/DATA/ARCHIVE/SUBJECT/SYLLABUS/2009/{0}/{0}_1.pdf'.format(subject_code)
         data['pageno']='0'
@@ -69,6 +69,7 @@ def get_syllabus(subject_code,subject_name):
                 exit()
                 t=t*2
                 continue
+
         if(response.status_code !=200 or response.apparent_encoding=='ascii'): #when file is not available, we get html response
             #print(response.status_code)
             #print(response.text)
@@ -115,3 +116,4 @@ if __name__ == '__main__':
     print(sys.argv)
     if(len(sys.argv)>1):
         print(get_syllabus(sys.argv[1]))
+      
